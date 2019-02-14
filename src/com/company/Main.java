@@ -39,8 +39,10 @@ public class Main {
         rootState.isHumanTurn = true;
 
 
-        while (rootState.isGameOver()){
+        while (!rootState.isGameOver()){
 
+            String currentPlayer = rootState.isHumanTurn?Main.playerName:Main.aiName;
+            System.out.println("User : "  + currentPlayer );
 
             if(rootState.isHumanTurn){
 
@@ -52,7 +54,11 @@ public class Main {
                 System.out.println("Please enter line position : ");
 
                 System.out.println("Available line positions  : ");
+                for(Box.Position availableMove: Box.Position.values()){
 
+                    System.out.print(availableMove+" ");
+                }
+                System.out.println();
                 String enteredPosition = scanner.next();
                 State.Move playerMove = new State.Move(x,y,Box.Position.valueOf(enteredPosition));
                 rootState.placeLine(playerMove,false);
@@ -60,10 +66,14 @@ public class Main {
 
             }else{
 
+                try {
 
-                Strategies strategy = new Strategies(Strategies.TYPE.MINIMAX, rootState,1);
-                rootState.placeLine(strategy.bestMove,false);
+                    Strategies  strategy = new Strategies(Strategies.TYPE.MINIMAX, rootState.clone(),1);
+                    rootState.placeLine(strategy.bestMove,false);
 
+                } catch (CloneNotSupportedException e) {
+                    e.printStackTrace();
+                }
 
             }
 

@@ -49,7 +49,7 @@ public class Strategies {
             return  maxScore;
         }
 
-        if(state.isHumanTurn){
+        if(!state.isHumanTurn){
 
             for(String move : state.possibleMoves){
 

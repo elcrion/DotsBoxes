@@ -19,13 +19,19 @@ public class Box  {
 
     public enum Position {TOP,BOTTOM,LEFT,RIGHT}
     HashMap<Position,Boolean> lines = new HashMap<Position, Boolean>();
-    boolean isHuman;
-    public String player;
+    public String player = "";
 
     Box(HashMap<Position,Boolean> lines ){
 
         this.lines = lines;
 
+    }
+
+    @Override
+    public Box clone () {
+        Box box = new Box(this.lines);
+
+        return box;
     }
 
 
@@ -36,7 +42,7 @@ public class Box  {
     public boolean isBoxOpen(){
 
 
-        return this.lines.containsKey(Boolean.FALSE);
+        return this.lines.containsValue(Boolean.FALSE);
 
     }
 

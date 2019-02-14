@@ -24,10 +24,29 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class State {
 
     int playerScore;
-    int aiScore;
+    int aiScore = -1;
     boolean isHumanTurn;
     Box[][] board;
     CopyOnWriteArraySet<String> possibleMoves = new CopyOnWriteArraySet<String>();
+
+
+
+    @Override
+    public State clone() throws CloneNotSupportedException {
+
+        State newState = new State();
+        newState.init();
+        for(int i = 0; i < this.board.length; i++) {
+            for(int j = 0; j < this.board[i].length; j++) {
+                newState.board[i][j] = this.board[i][j].clone();
+            }
+        }
+        newState.aiScore = this.aiScore;
+        newState.playerScore = this.playerScore;
+        newState.possibleMoves = this.possibleMoves;
+
+        return newState;
+    }
 
 
     /**
@@ -67,7 +86,7 @@ public class State {
 
             for(int y =0; y < Main.boardSize;y++){
 
-                if(board[x][y].player !=null && board[x][y].player != "" ){
+                if(board[x][y].player !=null && board[x][y].player == "" ){
 
                     return false;
                 }
@@ -158,11 +177,13 @@ public class State {
 
             Box currentBox = this.getBox(currentMove);
             if(remove) {
-                currentBox.lines.put(currentMove.linePosition, true);
-                this.possibleMoves.remove(currentMove.toString());
-            }else{
                 currentBox.lines.put(currentMove.linePosition, false);
                 this.possibleMoves.add(currentMove.toString());
+                currentBox.player = "";
+            }else{
+                currentBox.lines.put(currentMove.linePosition, true);
+                this.possibleMoves.remove(currentMove.toString());
+
             }
 
             if(!currentBox.isBoxOpen()){
