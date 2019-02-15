@@ -16,6 +16,7 @@ public class Strategies {
     public int score;
     public State.Move bestMove;
 
+
     Strategies(TYPE type, State state,int depth) throws CloneNotSupportedException {
 
 
@@ -29,7 +30,7 @@ public class Strategies {
 
             case ALPHABETA:
 
-                score = AlphaBeta(state,depth, Integer.MIN_VALUE,Integer.MAX_VALUE);
+                score = alphaBeta(state,depth, Integer.MIN_VALUE,Integer.MAX_VALUE);
 
                 break;
 
@@ -50,7 +51,7 @@ public class Strategies {
         int minScore = Integer.MAX_VALUE;
         int currentScore;
 
-        if(depth ==0 || state.isGameOver()){
+        if(depth == 0 || state.isGameOver()){
 
             return  maxScore;
         }
@@ -60,7 +61,7 @@ public class Strategies {
             for(String move : state.possibleMoves){
                 State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove);
+                currentState.placeLine(possibleMove,false);
                 currentScore = miniMax(currentState,depth-1);
 
                 if(maxScore <= currentScore){
@@ -68,7 +69,7 @@ public class Strategies {
                     this.bestMove = possibleMove;
                 }
 
-
+                state.placeLine(possibleMove,true);
             }
 
 
@@ -77,13 +78,15 @@ public class Strategies {
             for(String move : state.possibleMoves){
                 State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove);
+                currentState.placeLine(possibleMove,false);
                 currentScore = miniMax(currentState,depth-1);
+
                 if(minScore >= currentScore){
                     minScore = currentScore;
                     this.bestMove = possibleMove;
                 }
 
+                state.placeLine(possibleMove,true);
 
             }
 
@@ -101,14 +104,14 @@ public class Strategies {
 
 
     /**
-     * AlphaBeta logic implementation
+     * alphaBeta logic implementation
      * @param state current board state
      * @param depth curent ply
      * @param alpha alpha value
      * @param beta beta balue
      * @return best score for player
      */
-    private int AlphaBeta(State state,int depth,int alpha , int beta) throws CloneNotSupportedException {
+    private int alphaBeta(State state, int depth, int alpha , int beta) throws CloneNotSupportedException {
 
 
         if (depth == 0 || state.isGameOver()) {
@@ -121,8 +124,8 @@ public class Strategies {
             for (String move : state.possibleMoves) {
                 State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove);
-                int currentScore = AlphaBeta(currentState, depth - 1, alpha, beta);
+                currentState.placeLine(possibleMove,false);
+                int currentScore = alphaBeta(currentState, depth - 1, alpha, beta);
 
                 if (currentScore > alpha) {
                     alpha = currentScore;
@@ -133,7 +136,7 @@ public class Strategies {
                     break;
                 }
 
-
+                currentState.placeLine(possibleMove,true);
             }
 
             return alpha;
@@ -143,8 +146,8 @@ public class Strategies {
             for (String move : state.possibleMoves) {
                 State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove);
-                int currentScore = AlphaBeta(currentState, depth - 1, alpha, beta);
+                currentState.placeLine(possibleMove,false);
+                int currentScore = alphaBeta(currentState, depth - 1, alpha, beta);
 
                 if (currentScore < beta) {
                     beta = currentScore;
@@ -155,7 +158,7 @@ public class Strategies {
                     break;
                 }
 
-
+                currentState.placeLine(possibleMove,true);
             }
 
             return beta;

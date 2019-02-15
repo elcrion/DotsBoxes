@@ -69,7 +69,7 @@ public class Main {
                 System.out.println();
                 String enteredPosition = scanner.next();
                 State.Move playerMove = new State.Move(x,y,Box.Position.valueOf(enteredPosition));
-                rootState.placeLine(playerMove);
+                rootState.placeLine(playerMove,false);
 
 
             }else{
@@ -77,7 +77,7 @@ public class Main {
                 try {
 
                     Strategies  strategy = new Strategies(strategyType, rootState,1);
-                    rootState.placeLine(strategy.bestMove);
+                    rootState.placeLine(strategy.bestMove,false);
                     System.out.println("Move : " + strategy.bestMove.toString());
 
                 } catch (CloneNotSupportedException e) {

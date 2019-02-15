@@ -10,6 +10,7 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
@@ -24,10 +25,10 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class State {
 
     int playerScore;
-    int aiScore = -1;
+    int aiScore;
     boolean isHumanTurn;
     Box[][] board;
-    CopyOnWriteArraySet<String> possibleMoves = new CopyOnWriteArraySet<String>();
+    HashSet<String> possibleMoves = new HashSet<String>();
 
 
 
@@ -41,9 +42,11 @@ public class State {
                 newState.board[i][j] = this.board[i][j].clone();
             }
         }
+
         newState.aiScore = this.aiScore;
         newState.playerScore = this.playerScore;
-        newState.possibleMoves = this.possibleMoves;
+        newState.possibleMoves = (HashSet<String>) this.possibleMoves.clone();
+        newState.isHumanTurn = this.isHumanTurn;
 
         return newState;
     }
@@ -114,9 +117,8 @@ public class State {
      * If current Box have neighbors, place a line there too
      * ex. : top of the current box will be bottom of upper neighbor box
      * @param move
-     * @param remove
      */
-    public void placeLine(Move move){
+    public void placeLine(Move move,boolean delete){
 
         if(!move.isLegalMove()){
 
@@ -176,9 +178,15 @@ public class State {
         for(Move currentMove : boxesMoves){
 
             Box currentBox = this.getBox(currentMove);
-            currentBox.lines.put(currentMove.linePosition, true);
-            this.possibleMoves.remove(currentMove.toString());
+            if(delete) {
+                currentBox.lines.put(currentMove.linePosition, false);
+                this.possibleMoves.add(currentMove.toString());
 
+            }else{
+
+                currentBox.lines.put(currentMove.linePosition, true);
+                this.possibleMoves.remove(currentMove.toString());
+            }
 
             if(!currentBox.isBoxOpen()){
 
