@@ -116,7 +116,7 @@ public class State {
      * @param move
      * @param remove
      */
-    public void placeLine(Move move,boolean remove){
+    public void placeLine(Move move){
 
         if(!move.isLegalMove()){
 
@@ -176,15 +176,9 @@ public class State {
         for(Move currentMove : boxesMoves){
 
             Box currentBox = this.getBox(currentMove);
-            if(remove) {
-                currentBox.lines.put(currentMove.linePosition, false);
-                this.possibleMoves.add(currentMove.toString());
-                currentBox.player = "";
-            }else{
-                currentBox.lines.put(currentMove.linePosition, true);
-                this.possibleMoves.remove(currentMove.toString());
+            currentBox.lines.put(currentMove.linePosition, true);
+            this.possibleMoves.remove(currentMove.toString());
 
-            }
 
             if(!currentBox.isBoxOpen()){
 

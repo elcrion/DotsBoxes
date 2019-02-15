@@ -24,6 +24,7 @@ public class Main {
     public static String playerName = "Me";
     public static  String aiName ="Ai";
     private static Scanner scanner = new Scanner(System.in);
+    private static Strategies.TYPE strategyType;
 
     public static void main(String[] args) {
 
@@ -31,7 +32,15 @@ public class Main {
         boardSize = scanner.nextInt();
         System.out.println("Please enter the name for Player :  ");
         playerName = scanner.next();
+        System.out.print("Please select the strategy : ");
 
+        for(Strategies.TYPE strategy:Strategies.TYPE.values()){
+
+            System.out.print(strategy + " ");
+        }
+        System.out.println();
+
+        strategyType = Strategies.TYPE.valueOf(scanner.next());
 
         State rootState = new State();
         rootState.init();
@@ -45,7 +54,6 @@ public class Main {
             System.out.println("User : "  + currentPlayer );
 
             if(rootState.isHumanTurn){
-
 
                 System.out.println("Please enter x coordinate : ");
                 int x = scanner.nextInt();
@@ -61,25 +69,24 @@ public class Main {
                 System.out.println();
                 String enteredPosition = scanner.next();
                 State.Move playerMove = new State.Move(x,y,Box.Position.valueOf(enteredPosition));
-                rootState.placeLine(playerMove,false);
+                rootState.placeLine(playerMove);
 
 
             }else{
 
                 try {
 
-                    Strategies  strategy = new Strategies(Strategies.TYPE.MINIMAX, rootState.clone(),1);
-                    rootState.placeLine(strategy.bestMove,false);
+                    Strategies  strategy = new Strategies(strategyType, rootState,1);
+                    rootState.placeLine(strategy.bestMove);
                     System.out.println("Move : " + strategy.bestMove.toString());
+
                 } catch (CloneNotSupportedException e) {
                     e.printStackTrace();
                 }
 
             }
 
-
             rootState.printState();
-
         }
 
 

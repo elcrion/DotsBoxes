@@ -16,7 +16,7 @@ public class Strategies {
     public int score;
     public State.Move bestMove;
 
-    Strategies(TYPE type, State state,int depth){
+    Strategies(TYPE type, State state,int depth) throws CloneNotSupportedException {
 
 
         switch (type){
@@ -24,6 +24,12 @@ public class Strategies {
             case MINIMAX:
 
                 score = miniMax(state,depth);
+
+                break;
+
+            case ALPHABETA:
+
+                score = AlphaBeta(state,depth, Integer.MIN_VALUE,Integer.MAX_VALUE);
 
                 break;
 
@@ -38,10 +44,10 @@ public class Strategies {
      * @param depth current recursion depth
      * @return
      */
-    private int miniMax(State state,int depth){
+    private int miniMax(State state,int depth) throws CloneNotSupportedException {
 
-        int maxScore = state.aiScore;
-        int minScore = state.playerScore;
+        int maxScore = Integer.MIN_VALUE;
+        int minScore = Integer.MAX_VALUE;
         int currentScore;
 
         if(depth ==0 || state.isGameOver()){
@@ -52,32 +58,33 @@ public class Strategies {
         if(!state.isHumanTurn){
 
             for(String move : state.possibleMoves){
-
+                State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                state.placeLine(possibleMove,false);
-                currentScore = miniMax(state,depth-1);
+                currentState.placeLine(possibleMove);
+                currentScore = miniMax(currentState,depth-1);
+
                 if(maxScore <= currentScore){
                     maxScore = currentScore;
                     this.bestMove = possibleMove;
                 }
 
-                state.placeLine(possibleMove,true);
+
             }
 
 
         }else{
 
             for(String move : state.possibleMoves){
-
+                State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                state.placeLine(possibleMove,false);
-                currentScore = miniMax(state,depth-1);
+                currentState.placeLine(possibleMove);
+                currentScore = miniMax(currentState,depth-1);
                 if(minScore >= currentScore){
                     minScore = currentScore;
                     this.bestMove = possibleMove;
                 }
 
-                state.placeLine(possibleMove,true);
+
             }
 
 
@@ -89,6 +96,71 @@ public class Strategies {
 
 
         return maxScore;
+
+    }
+
+
+    /**
+     * AlphaBeta logic implementation
+     * @param state current board state
+     * @param depth curent ply
+     * @param alpha alpha value
+     * @param beta beta balue
+     * @return best score for player
+     */
+    private int AlphaBeta(State state,int depth,int alpha , int beta) throws CloneNotSupportedException {
+
+
+        if (depth == 0 || state.isGameOver()) {
+
+            return 0;
+        }
+
+        if (!state.isHumanTurn) {
+
+            for (String move : state.possibleMoves) {
+                State currentState = state.clone();
+                State.Move possibleMove = new State.Move(move);
+                currentState.placeLine(possibleMove);
+                int currentScore = AlphaBeta(currentState, depth - 1, alpha, beta);
+
+                if (currentScore > alpha) {
+                    alpha = currentScore;
+                    this.bestMove = possibleMove;
+                }
+
+                if (alpha >= beta) {
+                    break;
+                }
+
+
+            }
+
+            return alpha;
+
+        } else {
+
+            for (String move : state.possibleMoves) {
+                State currentState = state.clone();
+                State.Move possibleMove = new State.Move(move);
+                currentState.placeLine(possibleMove);
+                int currentScore = AlphaBeta(currentState, depth - 1, alpha, beta);
+
+                if (currentScore < beta) {
+                    beta = currentScore;
+                    this.bestMove = possibleMove;
+                }
+
+                if (alpha >= beta) {
+                    break;
+                }
+
+
+            }
+
+            return beta;
+        }
+
 
     }
 
