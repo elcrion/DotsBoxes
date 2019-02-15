@@ -70,7 +70,7 @@ public class Main {
 
                     Strategies  strategy = new Strategies(Strategies.TYPE.MINIMAX, rootState.clone(),1);
                     rootState.placeLine(strategy.bestMove,false);
-
+                    System.out.println("Move : " + strategy.bestMove.toString());
                 } catch (CloneNotSupportedException e) {
                     e.printStackTrace();
                 }

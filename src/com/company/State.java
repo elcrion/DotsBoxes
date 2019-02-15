@@ -104,7 +104,7 @@ public class State {
      */
     public Box getBox(Move move){
 
-        return board[move.x][move.y];
+        return board[move.y][move.x];
 
     }
 
@@ -134,7 +134,7 @@ public class State {
 
             case TOP:
 
-                if(move.y>0){
+                if(move.y >0){
 
                     boxesMoves.add(new Move(move.x,move.y-1, Box.Position.BOTTOM));
                 }
@@ -228,7 +228,7 @@ public class State {
                     System.out.print("  ");
                 }
                 if (!box.isBoxOpen()) {
-                    System.out.print(box.player + " ");
+                    System.out.print(box.player);
                 } else {
                     System.out.print("  ");
                 }
