@@ -28,6 +28,8 @@ public class State {
     int aiScore;
     boolean isHumanTurn;
     Box[][] board;
+    State nextState;
+    State rootState;
     HashSet<String> possibleMoves = new HashSet<String>();
 
 
@@ -36,7 +38,7 @@ public class State {
     public State clone() throws CloneNotSupportedException {
 
         State newState = new State();
-        newState.init();
+        newState.board = new Box[Main.boardSize][Main.boardSize];
         for(int i = 0; i < this.board.length; i++) {
             for(int j = 0; j < this.board[i].length; j++) {
                 newState.board[i][j] = this.board[i][j].clone();
@@ -45,7 +47,8 @@ public class State {
 
         newState.aiScore = this.aiScore;
         newState.playerScore = this.playerScore;
-        newState.possibleMoves = (HashSet<String>) this.possibleMoves.clone();
+        newState.possibleMoves = new HashSet<String>();
+        newState.possibleMoves.addAll(this.possibleMoves);
         newState.isHumanTurn = this.isHumanTurn;
 
         return newState;
@@ -118,9 +121,9 @@ public class State {
      * ex. : top of the current box will be bottom of upper neighbor box
      * @param move
      */
-    public void placeLine(Move move,boolean delete){
+    public void placeLine(Move move){
 
-        if(!move.isLegalMove() || !this.getBox(move).isBoxOpen() || this.getBox(move).lines.get(move.linePosition)){
+        if(!move.isLegalMove()  ){
 
             return;
         }
@@ -178,15 +181,9 @@ public class State {
         for(Move currentMove : boxesMoves){
 
             Box currentBox = this.getBox(currentMove);
-            if(delete) {
-                currentBox.lines.put(currentMove.linePosition, false);
-                this.possibleMoves.add(currentMove.toString());
+            currentBox.lines.put(currentMove.linePosition, true);
+            this.possibleMoves.remove(currentMove.toString());
 
-            }else{
-
-                currentBox.lines.put(currentMove.linePosition, true);
-                this.possibleMoves.remove(currentMove.toString());
-            }
 
             if(!currentBox.isBoxOpen()){
 

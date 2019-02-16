@@ -17,8 +17,10 @@ public class Strategies {
     public State.Move bestMove;
 
 
+
     Strategies(TYPE type, State state,int depth) throws CloneNotSupportedException {
 
+        state.rootState = state;
 
         switch (type){
 
@@ -53,54 +55,59 @@ public class Strategies {
 
         if(depth == 0 || state.isGameOver()){
 
-            return  maxScore ;
+            return  maxScore - minScore ;
         }
+
+
 
         if(!state.isHumanTurn){
 
             for(String move : state.possibleMoves){
-                State currentState = state.clone();
+                state.nextState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove,false);
-                int currentScore = miniMax(currentState,depth-1);
+                state.nextState.placeLine(possibleMove);
+                int currentScore = miniMax(state.nextState,depth-1);
 
                 if(maxScore <= currentScore){
                     maxScore = currentScore;
                     this.bestMove = possibleMove;
                 }
 
-                state.placeLine(possibleMove,true);
             }
 
 
         }else{
 
             for(String move : state.possibleMoves){
-                State currentState = state.clone();
+                state.nextState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove,false);
-                int currentScore = miniMax(currentState,depth-1);
+                state.nextState.placeLine(possibleMove);
+                int currentScore = miniMax(state.nextState,depth-1);
 
                 if(minScore >= currentScore){
                     minScore = currentScore;
                     this.bestMove = possibleMove;
                 }
 
-                state.placeLine(possibleMove,true);
+
 
             }
 
 
 
 
+
         }
 
+        state.rootState.placeLine(this.bestMove);
 
 
-
-        return maxScore ;
+        return maxScore - minScore ;
 
     }
+
+
+
 
 
     /**
@@ -122,10 +129,9 @@ public class Strategies {
         if (!state.isHumanTurn) {
 
             for (String move : state.possibleMoves) {
-                State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove,false);
-                int currentScore = alphaBeta(currentState, depth - 1, alpha, beta);
+                state.placeLine(possibleMove);
+                int currentScore = alphaBeta(state, depth - 1, alpha, beta);
 
                 if (currentScore > alpha) {
                     alpha = currentScore;
@@ -136,17 +142,16 @@ public class Strategies {
                     break;
                 }
 
-                currentState.placeLine(possibleMove,true);
             }
 
-            return alpha;
+            return alpha - beta;
 
         } else {
 
             for (String move : state.possibleMoves) {
                 State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove,false);
+                currentState.placeLine(possibleMove);
                 int currentScore = alphaBeta(currentState, depth - 1, alpha, beta);
 
                 if (currentScore < beta) {
@@ -158,10 +163,12 @@ public class Strategies {
                     break;
                 }
 
-                currentState.placeLine(possibleMove,true);
+
             }
 
-            return beta;
+            state.rootState.placeLine(this.bestMove);
+
+            return alpha -  beta;
         }
 
 

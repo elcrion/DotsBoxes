@@ -29,7 +29,10 @@ public class Box  {
 
     @Override
     public Box clone () {
-        Box box = new Box(this.lines);
+
+
+        Box box = new Box((HashMap<Position, Boolean>) this.lines.clone());
+
 
         return box;
     }
