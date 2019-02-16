@@ -62,38 +62,12 @@ public class Strategies {
 
         if(!state.isHumanTurn){
 
-            for(String move : state.possibleMoves){
-                state.nextState = state.clone();
-                State.Move possibleMove = new State.Move(move);
-                state.nextState.placeLine(possibleMove);
-                int currentScore = miniMax(state.nextState,depth-1);
 
-                if(maxScore <= currentScore){
-                    maxScore = currentScore;
-                    this.bestMove = possibleMove;
-                }
-
-            }
-
+            maxScore = getMiniMaxScore(state,depth,true,maxScore);
 
         }else{
 
-            for(String move : state.possibleMoves){
-                state.nextState = state.clone();
-                State.Move possibleMove = new State.Move(move);
-                state.nextState.placeLine(possibleMove);
-                int currentScore = miniMax(state.nextState,depth-1);
-
-                if(minScore >= currentScore){
-                    minScore = currentScore;
-                    this.bestMove = possibleMove;
-                }
-
-
-
-            }
-
-
+            minScore = maxScore = getMiniMaxScore(state,depth,false,minScore);
 
 
 
@@ -107,6 +81,39 @@ public class Strategies {
     }
 
 
+    /**
+     * Main implementation for MinMax recursive call
+     * @param state current state
+     * @param depth current ply
+     * @param isMax Max or Min player
+     * @param score max or min score
+     * @return current score
+     * @throws CloneNotSupportedException
+     */
+    private  int getMiniMaxScore(State state,int depth,boolean isMax,int score) throws CloneNotSupportedException {
+
+        for(String move : state.possibleMoves){
+            state.nextState = state.clone();
+            State.Move possibleMove = new State.Move(move);
+            state.nextState.placeLine(possibleMove);
+            int currentScore = miniMax(state.nextState,depth-1);
+
+            if(isMax && score <= currentScore){
+                score = currentScore;
+                this.bestMove = possibleMove;
+            }
+
+            if(!isMax && score >= currentScore){
+
+                score = currentScore;
+                this.bestMove = possibleMove;
+            }
+
+
+        }
+
+        return  score;
+    }
 
 
 
@@ -128,51 +135,59 @@ public class Strategies {
 
         if (!state.isHumanTurn) {
 
-            for (String move : state.possibleMoves) {
-                State.Move possibleMove = new State.Move(move);
-                state.placeLine(possibleMove);
-                int currentScore = alphaBeta(state, depth - 1, alpha, beta);
+           return   getAlphaBetaScore(state,depth,true,alpha,beta);
 
-                if (currentScore > alpha) {
-                    alpha = currentScore;
-                    this.bestMove = possibleMove;
-                }
-
-                if (alpha >= beta) {
-                    break;
-                }
-
-            }
-
-            return alpha - beta;
 
         } else {
 
-            for (String move : state.possibleMoves) {
-                State currentState = state.clone();
-                State.Move possibleMove = new State.Move(move);
-                currentState.placeLine(possibleMove);
-                int currentScore = alphaBeta(currentState, depth - 1, alpha, beta);
-
-                if (currentScore < beta) {
-                    beta = currentScore;
-                    this.bestMove = possibleMove;
-                }
-
-                if (alpha >= beta) {
-                    break;
-                }
-
-
-            }
-
-            state.rootState.placeLine(this.bestMove);
-
-            return alpha -  beta;
+          return getAlphaBetaScore(state,depth,false,alpha,beta);
         }
 
 
     }
+
+
+
+    /**
+     * Main implementation for AlphaBeta recursive call
+     * @param state current state
+     * @param depth current ply
+     * @param isMax Max or Min player
+     * @param alpha  score
+     * @param beta  score
+     * @return current score
+     * @throws CloneNotSupportedException
+     */
+    private  int getAlphaBetaScore(State state,int depth,boolean isMax,int alpha,int beta) throws CloneNotSupportedException {
+
+        for (String move : state.possibleMoves) {
+            state.nextState = state.clone();
+            State.Move possibleMove = new State.Move(move);
+            state.nextState.placeLine(possibleMove);
+            int currentScore = alphaBeta(state.nextState, depth - 1, alpha, beta);
+
+            if (isMax && currentScore > alpha) {
+                alpha = currentScore;
+                this.bestMove = possibleMove;
+            }
+
+            if (!isMax && currentScore < beta) {
+                beta = currentScore;
+                this.bestMove = possibleMove;
+            }
+
+            if (alpha >= beta) {
+                break;
+            }
+
+        }
+
+        state.rootState.placeLine(this.bestMove);
+
+        return  alpha - beta ;
+    }
+
+
 
 
 }
