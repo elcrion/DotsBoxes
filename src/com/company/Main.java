@@ -55,10 +55,10 @@ public class Main {
 
             if(rootState.isHumanTurn){
 
-                System.out.println("Please enter x coordinate : ");
-                int x = scanner.nextInt();
-                System.out.println("Please enter y coordinate : ");
-                int y = scanner.nextInt();
+                System.out.println("Please enter row coordinate : ");
+                int x = scanner.nextInt()-1;
+                System.out.println("Please enter column coordinate : ");
+                int y = scanner.nextInt()-1;
                 System.out.println("Please enter line position : ");
                 System.out.println("Available line positions : ");
                 index = 0;

@@ -206,18 +206,31 @@ public class State {
      */
     public void printState(){
 
+        int column = 1;
+        System.out.println();
+
+
+        /*
+            Print row cooddinates
+         */
+        for(int row = 1; row <= this.board[0].length;row++){
+
+            System.out.print("  " + row +" " );
+
+        }
 
         System.out.println();
+
         for (Box[] boxes : this.board) {
             for (Box box : boxes) {
-                System.out.print("o");
+                System.out.print("*");
                 if (box.lines.get(Box.Position.TOP)) {
                     System.out.print("---");
                 } else {
                     System.out.print("   ");
                 }
             }
-            System.out.print("o");
+            System.out.print("*");
             System.out.println();
 
             for (Box box : boxes) {
@@ -238,20 +251,24 @@ public class State {
                         System.out.print(" ");
                     }
 
+                    /*
+                        Print column coordinates
+                     */
+                    System.out.print("  " + column++);
                 }
             }
 
             System.out.println();
         }
         for (Box box : this.board[this.board.length - 1]) {
-            System.out.print("o");
+            System.out.print("*");
             if (box.lines.get(Box.Position.BOTTOM)) {
                 System.out.print("---");
             } else {
                 System.out.print("   ");
             }
         }
-        System.out.println("o");
+        System.out.println("*");
         System.out.println();
     }
 
