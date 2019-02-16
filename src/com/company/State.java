@@ -120,7 +120,7 @@ public class State {
      */
     public void placeLine(Move move,boolean delete){
 
-        if(!move.isLegalMove()){
+        if(!move.isLegalMove() || !this.getBox(move).isBoxOpen() || this.getBox(move).lines.get(move.linePosition)){
 
             return;
         }

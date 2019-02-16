@@ -49,11 +49,11 @@ public class Strategies {
 
         int maxScore = Integer.MIN_VALUE;
         int minScore = Integer.MAX_VALUE;
-        int currentScore;
+
 
         if(depth == 0 || state.isGameOver()){
 
-            return  maxScore;
+            return  maxScore ;
         }
 
         if(!state.isHumanTurn){
@@ -62,7 +62,7 @@ public class Strategies {
                 State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
                 currentState.placeLine(possibleMove,false);
-                currentScore = miniMax(currentState,depth-1);
+                int currentScore = miniMax(currentState,depth-1);
 
                 if(maxScore <= currentScore){
                     maxScore = currentScore;
@@ -79,7 +79,7 @@ public class Strategies {
                 State currentState = state.clone();
                 State.Move possibleMove = new State.Move(move);
                 currentState.placeLine(possibleMove,false);
-                currentScore = miniMax(currentState,depth-1);
+                int currentScore = miniMax(currentState,depth-1);
 
                 if(minScore >= currentScore){
                     minScore = currentScore;
@@ -98,7 +98,7 @@ public class Strategies {
 
 
 
-        return maxScore;
+        return maxScore ;
 
     }
 
@@ -116,7 +116,7 @@ public class Strategies {
 
         if (depth == 0 || state.isGameOver()) {
 
-            return 0;
+            return alpha - beta;
         }
 
         if (!state.isHumanTurn) {
