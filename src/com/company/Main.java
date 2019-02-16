@@ -44,9 +44,8 @@ public class Main {
 
         State rootState = new State();
         rootState.init();
-
         rootState.isHumanTurn = true;
-
+        rootState.printState();
 
         while (!rootState.isGameOver()){
 
