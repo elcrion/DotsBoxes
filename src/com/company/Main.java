@@ -76,9 +76,9 @@ public class Main {
 
                 try {
 
-                    Strategies  strategy = new Strategies(strategyType, rootState,1);
+                    Strategies  strategy = new Strategies(strategyType, rootState,7);
                     System.out.println("Move : " + strategy.bestMove.toString());
-
+                    rootState.placeLine(strategy.bestMove);
                 } catch (CloneNotSupportedException e) {
                     e.printStackTrace();
                 }

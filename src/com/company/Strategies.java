@@ -18,9 +18,10 @@ public class Strategies {
 
 
 
+
     Strategies(TYPE type, State state,int depth) throws CloneNotSupportedException {
 
-        state.rootState = state;
+
 
         switch (type){
 
@@ -67,13 +68,13 @@ public class Strategies {
 
         }else{
 
-            minScore = maxScore = getMiniMaxScore(state,depth,false,minScore);
+            minScore  = getMiniMaxScore(state,depth,false,minScore);
 
 
 
         }
 
-        state.rootState.placeLine(this.bestMove);
+     //   this.rootState.placeLine(this.bestMove);
 
 
         return maxScore - minScore ;
@@ -108,6 +109,7 @@ public class Strategies {
                 score = currentScore;
                 this.bestMove = possibleMove;
             }
+
 
 
         }
@@ -182,7 +184,7 @@ public class Strategies {
 
         }
 
-        state.rootState.placeLine(this.bestMove);
+
 
         return  alpha - beta ;
     }

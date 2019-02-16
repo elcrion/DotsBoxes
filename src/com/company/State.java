@@ -30,7 +30,7 @@ public class State {
     Box[][] board;
     State nextState;
     State rootState;
-    HashSet<String> possibleMoves = new HashSet<String>();
+    CopyOnWriteArraySet<String> possibleMoves = new CopyOnWriteArraySet<String>();
 
 
 
@@ -47,7 +47,7 @@ public class State {
 
         newState.aiScore = this.aiScore;
         newState.playerScore = this.playerScore;
-        newState.possibleMoves = new HashSet<String>();
+        newState.possibleMoves = new CopyOnWriteArraySet<String>();
         newState.possibleMoves.addAll(this.possibleMoves);
         newState.isHumanTurn = this.isHumanTurn;
 
