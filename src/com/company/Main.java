@@ -72,6 +72,7 @@ public class Main {
                 rootState.placeLine(playerMove);
 
 
+
             }else{
 
                 try {
@@ -87,6 +88,9 @@ public class Main {
 
             rootState.printState();
         }
+
+        System.out.println();
+        System.out.print(String.format("Player score : %d   Ai score : %d",rootState.playerScore,rootState.aiScore));
 
 
     }
