@@ -30,17 +30,17 @@ public class Main {
 
         System.out.println("Please enter the size of the board : ");
         boardSize = scanner.nextInt();
-        System.out.println("Please enter the name for Player :  ");
-        playerName = scanner.next();
         System.out.print("Please select the strategy : ");
 
+        int index = 0;
         for(Strategies.TYPE strategy:Strategies.TYPE.values()){
-
-            System.out.print(strategy + " ");
+            index++;
+            System.out.print(index +". " + strategy + "  ");
         }
+
         System.out.println();
 
-        strategyType = Strategies.TYPE.valueOf(scanner.next());
+        strategyType = Strategies.TYPE.values()[scanner.nextInt()-1];
 
         State rootState = new State();
         rootState.init();
@@ -60,16 +60,16 @@ public class Main {
                 System.out.println("Please enter y coordinate : ");
                 int y = scanner.nextInt();
                 System.out.println("Please enter line position : ");
-
-                System.out.println("Available line positions  : ");
+                System.out.println("Available line positions : ");
+                index = 0;
                 for(Box.Position availableMove: Box.Position.values()){
-
-                    System.out.print(availableMove+" ");
+                    index++;
+                    System.out.print(index + ". "+availableMove+"  ");
                 }
                 System.out.println();
-                String enteredPosition = scanner.next();
-                State.Move playerMove = new State.Move(x,y,Box.Position.valueOf(enteredPosition));
-                rootState.placeLine(playerMove,false);
+                Box.Position enteredPosition = Box.Position.values()[scanner.nextInt()-1];
+                State.Move playerMove = new State.Move(x,y,enteredPosition);
+                rootState.placeLine(playerMove);
 
 
             }else{
@@ -77,7 +77,6 @@ public class Main {
                 try {
 
                     Strategies  strategy = new Strategies(strategyType, rootState,1);
-                    rootState.placeLine(strategy.bestMove,false);
                     System.out.println("Move : " + strategy.bestMove.toString());
 
                 } catch (CloneNotSupportedException e) {
@@ -91,10 +90,6 @@ public class Main {
 
 
     }
-
-
-
-
 
 
 
