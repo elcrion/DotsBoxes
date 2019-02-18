@@ -29,7 +29,6 @@ public class State {
     boolean isHumanTurn;
     Box[][] board;
     State nextState;
-    State rootState;
     CopyOnWriteArraySet<String> possibleMoves = new CopyOnWriteArraySet<String>();
 
 

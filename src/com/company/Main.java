@@ -25,6 +25,7 @@ public class Main {
     public static  String aiName ="Ai";
     private static Scanner scanner = new Scanner(System.in);
     private static Strategies.TYPE strategyType;
+    private  static  int depth = 2;
 
     public static void main(String[] args) {
 
@@ -42,6 +43,10 @@ public class Main {
 
         strategyType = Strategies.TYPE.values()[scanner.nextInt()-1];
 
+        System.out.println("Please set the tree depth : ");
+        depth = scanner.nextInt();
+        System.out.println();
+
         State rootState = new State();
         rootState.init();
         rootState.isHumanTurn = true;
@@ -54,9 +59,9 @@ public class Main {
 
             if(rootState.isHumanTurn){
 
-                System.out.println("Please enter row coordinate : ");
-                int x = scanner.nextInt()-1;
                 System.out.println("Please enter column coordinate : ");
+                int x = scanner.nextInt()-1;
+                System.out.println("Please enter row coordinate : ");
                 int y = scanner.nextInt()-1;
                 System.out.println("Please enter line position : ");
                 System.out.println("Available line positions : ");
@@ -76,8 +81,8 @@ public class Main {
 
                 try {
 
-                    Strategies  strategy = new Strategies(strategyType, rootState,7);
-                    System.out.println("Move : " + strategy.bestMove.toString());
+                    Strategies  strategy = new Strategies(strategyType, rootState,depth);
+                    System.out.println(String.format("Move %d %d %s",(strategy.bestMove.x+1),(strategy.bestMove.y+1),strategy.bestMove.linePosition));
                     rootState.placeLine(strategy.bestMove);
                 } catch (CloneNotSupportedException e) {
                     e.printStackTrace();

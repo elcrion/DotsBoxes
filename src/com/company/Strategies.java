@@ -56,7 +56,7 @@ public class Strategies {
 
         if(depth == 0 || state.isGameOver()){
 
-            return  maxScore - minScore ;
+            return  state.aiScore - state.playerScore ;
         }
 
 
@@ -64,20 +64,19 @@ public class Strategies {
         if(!state.isHumanTurn){
 
 
-            maxScore = getMiniMaxScore(state,depth,true,maxScore);
+            return getMiniMaxScore(state,depth,true,maxScore);
 
         }else{
 
-            minScore  = getMiniMaxScore(state,depth,false,minScore);
+            return getMiniMaxScore(state,depth,false,minScore);
 
 
 
         }
 
-     //   this.rootState.placeLine(this.bestMove);
 
 
-        return maxScore - minScore ;
+
 
     }
 
@@ -132,7 +131,7 @@ public class Strategies {
 
         if (depth == 0 || state.isGameOver()) {
 
-            return alpha - beta;
+            return state.aiScore - state.playerScore ;
         }
 
         if (!state.isHumanTurn) {
@@ -186,7 +185,7 @@ public class Strategies {
 
 
 
-        return  alpha - beta ;
+        return  isMax?alpha:beta ;
     }
 
 
